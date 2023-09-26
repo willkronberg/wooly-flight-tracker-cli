@@ -78,7 +78,7 @@ class FlightTrackerService:
             else None,
         )
 
-    def track_flight(self, airline_name: str, flight_number: str, poll_seconds=30):
+    def track_flight(self, airline_name: str, flight_number: str, poll_seconds: int):
         flight_status = self.get_flight_status(airline_name, flight_number)
 
         print(

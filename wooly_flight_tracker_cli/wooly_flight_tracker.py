@@ -16,32 +16,12 @@ def cli(ctx):
 
 
 @click.command()
-@click.argument("name")
-def greet(name: str):
-    logging.info(f"Hello, {name}!")
-
-
-cli.add_command(greet)
-
-
-@click.command()
-@click.argument("call_sign")
-def get_flight_details(call_sign: str):
-    tracker = FlightTrackerService()
-    flight_details = tracker.get_flight_details(call_sign)
-    logging.info(flight_details.model_dump())
-
-
-cli.add_command(get_flight_details)
-
-
-@click.command()
 @click.argument("airline_name")
 @click.argument("flight_number")
 def get_flight_status(airline_name: str, flight_number: str):
     tracker = FlightTrackerService()
     flight_status = tracker.get_flight_status(airline_name, flight_number)
-    logging.info(flight_status.model_dump())
+    print(flight_status.model_dump_json(indent=2))
 
 
 cli.add_command(get_flight_status)
@@ -50,33 +30,13 @@ cli.add_command(get_flight_status)
 @click.command()
 @click.argument("airline_name")
 @click.argument("flight_number")
-def track_flight(airline_name: str, flight_number: str):
+@click.option("-p", "--poll-seconds", "poll_seconds", default=30, show_default=True)
+def track_flight(airline_name: str, flight_number: str, poll_seconds: int):
     tracker = FlightTrackerService()
-    tracker.track_flight(airline_name, flight_number)
+    tracker.track_flight(airline_name, flight_number, poll_seconds)
 
 
 cli.add_command(track_flight)
-
-
-@click.command()
-@click.argument("airline")
-def get_all_flights(airline: str):
-    tracker = FlightTrackerService()
-    tracker.get_all_flights(airline)
-
-
-cli.add_command(get_all_flights)
-
-
-@click.command()
-@click.argument("airline_name")
-def get_airline_info(airline_name: str):
-    tracker = FlightTrackerService()
-    airline = tracker.get_airline_information(airline_name)
-    print(airline)
-
-
-cli.add_command(get_airline_info)
 
 
 def main():
